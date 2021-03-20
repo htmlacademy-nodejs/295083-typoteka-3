@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Viacheslav Lushchinskiy](https://up.htmlacademy.ru/nodejs/3/user/295083).
-* Наставник: `Неизвестно`.
+* Наставник: `Эдуард Симонян`.
 
 ---
 
