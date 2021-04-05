@@ -4,6 +4,7 @@ const fs = require(`fs`).promises;
 const {getRandomInt, shuffle, randomDate} = require(`./utils`);
 
 const DEFAULT_COUNT = 1;
+const EXIT_ERROR_CODE = 1;
 const MAX_COUNT = 1000;
 const FILE_NAME = `mocks.json`;
 
@@ -63,15 +64,18 @@ const generateOffers = (count) => (
     announce: shuffle(ANNOUNCE).slice(1, getRandomInt(2, 6)).join(` `),
     fullText: shuffle(ANNOUNCE).slice(1, getRandomInt(2, ANNOUNCE.length)).join(` `),
     createdDate: randomDate(),
-    category: [...shuffle(CATEGORIES).slice(1, getRandomInt(2, CATEGORIES.length))]
+    category: shuffle(CATEGORIES).slice(1, getRandomInt(2, CATEGORIES.length))
   }))
 );
 
 module.exports = {
   name: `--generate`,
-  run: async (args) => {
-    const count = args?.[0];
+  run: async (count) => {
     const countOffer = Number.parseInt(count, 10) || DEFAULT_COUNT;
+    if (countOffer > MAX_COUNT) {
+      console.error(`Не больше 1000 публикаций`);
+      process.exit(EXIT_ERROR_CODE);
+    }
     const content = JSON.stringify(generateOffers(countOffer));
     try {
       await fs.writeFile(FILE_NAME, content);
