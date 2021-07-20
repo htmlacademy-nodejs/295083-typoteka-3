@@ -8,23 +8,23 @@ class ArticleService {
     this._articles = articles;
   }
 
-  create(offer) {
-    const newOffer = Object
-      .assign({id: nanoid(MAX_ID_LENGTH), comments: []}, offer);
+  create(article) {
+    const newArticle = Object
+      .assign({id: nanoid(MAX_ID_LENGTH), comments: []}, article);
 
-    this._articles.push(newOffer);
-    return newOffer;
+    this._articles.push(newArticle);
+    return newArticle;
   }
 
   drop(id) {
-    const offer = this._articles.find((item) => item.id === id);
+    const article = this._articles.find((item) => item.id === id);
 
-    if (!offer) {
+    if (!article) {
       return null;
     }
 
     this._articles = this._articles.filter((item) => item.id !== id);
-    return offer;
+    return article;
   }
 
   findAll() {
@@ -39,6 +39,9 @@ class ArticleService {
     const oldArticle = this._articles
       .find((item) => item.id === id);
 
+    if (!oldArticle) {
+      return null;
+    }
     return Object.assign(oldArticle, article);
   }
 
