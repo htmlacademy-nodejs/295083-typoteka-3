@@ -3,6 +3,7 @@
 const chalk = require(`chalk`);
 const {nanoid} = require(`nanoid`);
 const fs = require(`fs`).promises;
+const {MAX_ID_LENGTH} = require(`../../constants`);
 
 const {getRandomInt, shuffle, randomDate} = require(`./utils`);
 
@@ -14,13 +15,15 @@ const FILE_TITLES_PATH = `./src/data/titles.txt`;
 const FILE_CATEGORIES_PATH = `./src/data/categories.txt`;
 const FILE_COMMENTS_PATH = `./src/data/comments.txt`;
 const FILE_NAME = `mocks.json`;
-const MAX_ID_LENGTH = 6;
+
 const MAX_COMMENTS = 4;
 
 const readContent = async (filePath) => {
   try {
     const content = await fs.readFile(filePath, `utf8`);
-    return content.split(`\n`);
+    const arr = content.split(`\n`);
+    arr.pop();
+    return arr;
   } catch (err) {
     console.error(chalk.red(err));
     return [];
@@ -40,10 +43,10 @@ const generateOffers = (count, titles, announce, categories, comments) => (
   Array(count).fill({}).map(() => ({
     id: nanoid(MAX_ID_LENGTH),
     title: titles[getRandomInt(0, titles.length - 1)],
-    announce: shuffle(announce).slice(1, getRandomInt(2, 6)).join(` `),
-    fullText: shuffle(announce).slice(1, getRandomInt(2, announce.length)).join(` `),
+    announce: shuffle(announce).slice(0, getRandomInt(2, 6)).join(` `),
+    fullText: shuffle(announce).slice(0, getRandomInt(2, announce.length)).join(` `),
     createdDate: randomDate(),
-    category: shuffle(categories).slice(1, getRandomInt(2, categories.length)),
+    category: shuffle(categories).slice(0, getRandomInt(2, categories.length)),
     comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments)
   }))
 );
