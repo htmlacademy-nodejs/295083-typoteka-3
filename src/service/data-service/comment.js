@@ -5,23 +5,24 @@ const {MAX_ID_LENGTH} = require(`../../constants`);
 
 class CommentService {
 
-  create(offer) {
-    const newOffer = Object
-      .assign({id: nanoid(MAX_ID_LENGTH), comments: []}, offer);
+  create(article, comment) {
+    const newComment = Object
+      .assign({id: nanoid(MAX_ID_LENGTH)}, comment);
 
-    this._articles.push(newOffer);
-    return newOffer;
+    article.comments.push(newComment);
+    return newComment;
   }
 
-  drop(id) {
-    const article = this._articles.find((item) => item.id === id);
+  drop(article, commentId) {
+    const {comments = []} = article;
 
-    if (!article) {
+    const comment = comments.find((item) => item.id === commentId);
+
+    if (!comment) {
       return null;
     }
 
-    this._articles = this._articles.filter((item) => item.id !== id);
-    return article;
+    return comments.filter((item) => item.id !== commentId);
   }
 
   findAll(article) {
