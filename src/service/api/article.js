@@ -11,8 +11,8 @@ const route = new Router();
 module.exports = (app, articleService, commentService) => {
   app.use(`/articles`, route);
 
-  route.get(`/`, async (req, res) => {
-    const articles = await articleService.findAll();
+  route.get(`/`, (req, res) => {
+    const articles = articleService.findAll();
     res.status(HttpCode.OK)
       .json(articles);
   });
