@@ -1,32 +1,14 @@
 'use strict';
 const express = require(`express`);
-const fs = require(`fs`).promises;
+
+const {HttpCode, API_PREFIX} = require(`../../constants`);
+const routes = require(`../api`);
 
 const DEFAULT_PORT = 3000;
-const FILENAME = `./mocks1.json`;
-
-const HttpCode = {
-  OK: 200,
-  CREATED: 201,
-  NOT_FOUND: 404,
-  INTERNAL_SERVER_ERROR: 500,
-  FORBIDDEN: 403,
-  UNAUTHORIZED: 401,
-  BAD_REQUEST: 400,
-};
 
 const app = express();
 app.use(express.json());
-
-app.get(`/posts`, async (req, res) => {
-  try {
-    const fileContent = await fs.readFile(FILENAME);
-    const mocks = JSON.parse(fileContent);
-    res.json(mocks);
-  } catch (err) {
-    res.json([]);
-  }
-});
+app.use(API_PREFIX, routes);
 
 app.use((req, res) => res
   .status(HttpCode.NOT_FOUND)
