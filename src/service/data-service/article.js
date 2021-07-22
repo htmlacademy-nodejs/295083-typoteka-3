@@ -8,14 +8,6 @@ class ArticleService {
     this._articles = articles;
   }
 
-  create(article) {
-    const newArticle = Object
-      .assign({id: nanoid(MAX_ID_LENGTH), comments: []}, article);
-
-    this._articles.push(newArticle);
-    return newArticle;
-  }
-
   drop(id) {
     const article = this._articles.find((item) => item.id === id);
 
@@ -24,7 +16,16 @@ class ArticleService {
     }
 
     this._articles = this._articles.filter((item) => item.id !== id);
+
     return article;
+  }
+
+  create(article) {
+    const newArticle = Object
+      .assign({id: nanoid(MAX_ID_LENGTH), comments: []}, article);
+
+    this._articles.push(newArticle);
+    return newArticle;
   }
 
   findAll() {
