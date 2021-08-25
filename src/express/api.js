@@ -38,6 +38,13 @@ class API {
       data
     });
   }
+
+  async updateArticle(data, id) {
+    return this._load(`/articles/${id}`, {
+      method: `PUT`,
+      data
+    });
+  }
 }
 
 const TIMEOUT = 1000;

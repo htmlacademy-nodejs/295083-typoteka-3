@@ -5,7 +5,7 @@ const {nanoid} = require(`nanoid`);
 const fs = require(`fs`).promises;
 const {MAX_ID_LENGTH} = require(`../../constants`);
 
-const {getRandomInt, shuffle, randomDate} = require(`./utils`);
+const {getRandomInt, shuffle, randomDate} = require(`../../utils`);
 
 const DEFAULT_COUNT = 1;
 const EXIT_ERROR_CODE = 1;

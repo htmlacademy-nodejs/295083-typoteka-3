@@ -5,6 +5,7 @@ const api = require(`../api`).getAPI();
 const multer = require(`multer`);
 const path = require(`path`);
 const {nanoid} = require(`nanoid`);
+const {ensureArray} = require(`../../utils`);
 
 const UPLOAD_DIR = `../upload/img/`;
 const uploadDirAbsolute = path.resolve(__dirname, UPLOAD_DIR);
@@ -29,7 +30,11 @@ articlesRoutes.get(`/add`, async (req, res) => {
 
 articlesRoutes.get(`/category/:id`, (req, res) => res.render(`articles-by-category`));
 
-articlesRoutes.get(`/:id`, (req, res) => res.render(`post`));
+articlesRoutes.get(`/:id`, async (req, res) => {
+  const {id} = req.params;
+  const article = await api.getArticle(id);
+  res.render(`post`, {article});
+});
 
 
 articlesRoutes.get(`/edit/:id`, async (req, res) => {
@@ -44,11 +49,11 @@ articlesRoutes.post(`/add`, upload.single(`upload`), async (req, res) => {
     title: body.title,
     announce: body.announcement,
     fullText: body.fullText,
-    createdDate: new Date().toISOString(),
-    category: Array.isArray(body.category) ? body.category : [body.category]
+    createdDate: new Date().toLocaleString(),
+    categories: ensureArray(body.category),
   };
   if (file) {
-    articleData.photo = file.filename;
+    articleData.picture = file.filename;
   }
 
 
@@ -56,6 +61,34 @@ articlesRoutes.post(`/add`, upload.single(`upload`), async (req, res) => {
     await api.createArticle(articleData);
     res.redirect(`/my`);
   } catch (error) {
+    console.error(error.message);
+    res.redirect(`back`);
+  }
+});
+
+articlesRoutes.post(`/edit/:id`, upload.single(`upload`), async (req, res) => {
+  const {body, file} = req;
+  const {id} = req.params;
+  const article = await api.getArticle(id);
+
+  const updateArticle = {
+    title: body.title,
+    announce: body.announcement,
+    fullText: body.fullText,
+    categories: ensureArray(body.category),
+  };
+
+  if (file) {
+    updateArticle.picture = file.filename;
+  }
+
+  const articleData = Object.assign(article, updateArticle);
+
+  try {
+    await api.updateArticle(articleData, id);
+    res.redirect(`/my`);
+  } catch (error) {
+    console.error(error.message);
     res.redirect(`back`);
   }
 });
