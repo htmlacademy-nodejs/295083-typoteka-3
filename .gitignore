@@ -15,4 +15,4 @@ node_modules/
 build/
 
 mocks.json
-*/express/upload*
+*upload/*
