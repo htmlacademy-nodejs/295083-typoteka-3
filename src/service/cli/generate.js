@@ -5,7 +5,7 @@ const {nanoid} = require(`nanoid`);
 const fs = require(`fs`).promises;
 const {MAX_ID_LENGTH} = require(`../../constants`);
 
-const {getRandomInt, shuffle, randomDate} = require(`./utils`);
+const {getRandomInt, shuffle, randomDate} = require(`../../utils`);
 
 const DEFAULT_COUNT = 1;
 const EXIT_ERROR_CODE = 1;
@@ -46,7 +46,7 @@ const generateOffers = (count, titles, announce, categories, comments) => (
     announce: shuffle(announce).slice(0, getRandomInt(2, 6)).join(` `),
     fullText: shuffle(announce).slice(0, getRandomInt(2, announce.length)).join(` `),
     createdDate: randomDate(),
-    category: shuffle(categories).slice(0, getRandomInt(2, categories.length)),
+    category: shuffle(categories).slice(0, getRandomInt(2, 4)),
     comments: generateComments(getRandomInt(1, MAX_COMMENTS), comments)
   }))
 );
