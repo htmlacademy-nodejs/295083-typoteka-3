@@ -36,7 +36,8 @@ FROM
 	LEFT JOIN
 	comments
 	ON articles."id" = comments.article_id
-	GROUP BY articles.id,	users."id"
+	GROUP BY articles.id, users."id"
+    ORDER BY articles.created_at DESC
 
 
 
