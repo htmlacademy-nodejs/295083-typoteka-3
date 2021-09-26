@@ -17,3 +17,5 @@ build/
 mocks.json
 *upload*
 *.ndm2
+.env
+
